@@ -23,6 +23,9 @@ Software open source, favor citar o autor: Seu Robô https://SeuRobo.com.br/
   long distancia_cm=0;
   int minimumRange=5; //tempo de resposta do sensor
   int maximumRange=200;
+
+String fraseRecebida = ""; // a String to hold incoming data
+bool fraseCompleta = false;  // whether the string is complete
     
   // executado na inicialização do Arduino    
   void setup(){    
@@ -39,9 +42,21 @@ Software open source, favor citar o autor: Seu Robô https://SeuRobo.com.br/
     
   // Função principal do Arduino    
   void loop(){    
-    // pensar(); //inicia a função pensar  
-    motor1.run(FORWARD);
-    motor2.run(FORWARD);
+    pensar(); //inicia a função pensar  
+    // motor1.run(FORWARD);
+    // motor2.run(FORWARD);
+
+    while(Serial.available()) {
+      // get the new byte:
+      char inChar = (char)Serial.read();
+      // add it to the inputString:
+      fraseRecebida += inChar;
+      // if the incoming character is a newline, set a flag so the main loop can
+      // do something about it:
+      if (inChar == '\n') {
+        fraseCompleta = true;
+      }
+    }
   }    
     
   // Função para chamar outras funções e definir o que o robô fará  
